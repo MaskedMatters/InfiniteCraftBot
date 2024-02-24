@@ -1,0 +1,15 @@
+{
+  "name": "infinitecraftdiscoveries",
+  "version": "1.0.0",
+  "description": "A bot that brute forces for first discoveries",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "M. West",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
