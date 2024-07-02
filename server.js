@@ -37,6 +37,10 @@ async function fetchData() {
     // Create a set of elements
     const elements = new Set(['Water', 'Fire', 'Wind', 'Earth']);
 
+    // Developers editing this code, if you find a better way to enable rate limiting, feel free to do so.
+    // This is probably not the best approach but it will kick you from the API if you don't rate limit.
+    let chunkCount = 0
+
     // Get the first element
     for (const first of elements) {
 
@@ -45,16 +49,28 @@ async function fetchData() {
 
             try {
 
-                const response = await requestAPI(first, second);                             // Request the API
-                const newElement = response.result;                                           // Save the new element
-                                                                                              //
-                elements.add(newElement);                                                     // Add the element to the set
-                                                                                              //
-                console.log(`${first} and ${second} make ${response.emoji} ${newElement}`);   // Log the new element
-                                                                                              //
-                if (response.isNew) {                                                         // Check if the element is new
-                    console.log("OH MY GOD!! THE BOT WORKS!!!! FIRST DISCOVERY!!!!!");        // If new, log it
-                    break; // Exit the loop if a new element is discovered (optional)         // If new, break loop
+                const response = await requestAPI(first, second);                              // Request the API
+                const newElement = response.result;                                            // Save the new element
+                                                                                               //
+                elements.add(newElement);                                                      // Add the element to the set
+                                                                                               //
+                console.log(`${first} and ${second} make ${response.emoji}  ${newElement}`);   // Log the new element
+                                                                                               //
+                if (response.isNew) {                                                          // Check if the element is new
+                    console.log("OH MY GOD!! THE BOT WORKS!!!! FIRST DISCOVERY!!!!!");         // If new, log it
+                    break; // Exit the loop if a new element is discovered (optional)          // If new, break loop
+                }
+
+                // Delay next request by 500 ms
+                await new Promise(resolve => setTimeout(resolve, 500))
+
+                // Delay each chunk by 10 seconds
+                chunkCount++
+                if (chunkCount >= 30) {
+                    console.log("\nChunk completed, waiting 10 seconds...\n")
+                    await new Promise(resolve => setTimeout(resolve, 10000))
+
+                    chunkCount = 0
                 }
 
             } catch (error) {
